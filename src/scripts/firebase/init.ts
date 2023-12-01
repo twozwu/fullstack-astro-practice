@@ -3,23 +3,25 @@
  */
 import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 
-/**
- * The following represent the firebase client configuration for the application.
- * These are safe to be exposed on the client.
- * ⚠️ TODO: change these to match your project configuration.
- */
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  projectId: "XXXXXXXXXXXXXXXXXXXX",
-  messagingSenderId: "XXXXXXXXXXXXXXXXXXXX",
-  authDomain: "XXXXXXXXXXXXXXXXXXXX",
-  storageBucket: "XXXXXXXXXXXXXXXXXXXX",
-  apiKey: "XXXXXXXXXXXXXXXXXXXX",
-  appId: "XXXXXXXXXXXXXXXXXXXX",
+  apiKey: "AIzaSyCdE6XqSvDrKz3VWART5kgc9I1qEENkfMg",
+  authDomain: "beaudible-da042.firebaseapp.com",
+  databaseURL: "https://beaudible-da042-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "beaudible-da042",
+  storageBucket: "beaudible-da042.appspot.com",
+  messagingSenderId: "791337603222",
+  appId: "1:791337603222:web:118f4044f10dddb09372b7"
 };
 
-// Initialize Firebase apps
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+export const storage = getStorage();
 export const auth = getAuth(app);
 
 /**

@@ -82,3 +82,44 @@ const { isPrivatePage = false } = Astro.props;
     <slot />
   </body>
 </html>
+
+<!-- 📂 src/pages/layouts/BaseLayout.astro -->
+<!-- ... -->
+<script>
+  import { auth } from "@scripts/firebase/init";
+
+   // Grab the sign-out button
+  const signoutButton = document.getElementById("sign-out-button") as
+    | HTMLButtonElement
+    | undefined;
+
+  if (signoutButton) {
+    // Add a click event listener on the button
+    signoutButton.addEventListener("click", async () => {
+      try {
+        // Disable the button while we log the user out
+        signoutButton.disabled = true;
+        // Change button text to read "Signing out ..."
+        signoutButton.innerText = "Signing out ...";
+        // Invalidate server http cookie
+        const response = await fetch("/api/auth/signout", {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("server signout failed");
+        }
+  /**
+  	* sign the user out via the signOut method
+  * on the Firebase auth module
+  */
+        await auth.signOut ();
+  // Redirect to the signin page
+        window.location.href = "/signin";
+      } catch (error) {
+        signoutButton.disabled = false;
+        alert(error);
+      }
+    });
+  }
+</script>

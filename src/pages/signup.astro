@@ -69,3 +69,80 @@ import BaseLayout from "@layouts/BaseLayout.astro";
     </div>
   </section>
 </BaseLayout>
+
+<!-- 📂 src/pages/signup.astro -->
+<script>
+  // import the Validator from the tiny "validator.tool" library
+  import Validator from "validator.tool";
+  import { createUserWithEmailAndPassword } from "firebase/auth";
+  // Import the auth module from `src/scripts`
+  import { auth } from "@scripts/firebase/init";
+  // Import basic form validation rules
+  import { authClientValidationRules } from "@scripts/authClientValidationRules";
+
+ // Type alias for the form values
+  type FormValues = {
+    email?: string;
+    password?: string;
+  };
+
+  // Grab the submit button element
+  const submitButton = document.getElementById(
+    "submit-signup-form"
+  ) as HTMLButtonElement | null;
+
+  // Grab the form element
+  const form = document.getElementById("signup-form") as HTMLFormElement | null;
+
+   // Initialise the validator
+  const validator = new Validator({
+    form,
+    // Pass in basic rules already existing in the project
+    rules: authClientValidationRules,
+  });
+
+
+  if (validator.form) {
+    // Attach a submit event handler on the form
+    validator.form.onsubmit = async (evt) => {
+      evt.preventDefault();
+
+      const errors = validator.errorMessages;
+      const values = validator.getValues() as FormValues;
+
+      //Check for errors
+      if (Object.keys(errors).length > 0) {
+        const errorMessages = Object.values(errors).join("...and...");
+        return alert(errorMessages);
+      }
+
+      const { email, password } = values as Required<FormValues>;
+
+      if (!submitButton) {
+        return alert("Missing form button");
+      }
+
+      try {
+        // Show submitting state
+        submitButton.innerText = "Submitting";
+        submitButton.disabled = true;
+
+        // Create the new user
+        const { user } = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+     // redirect the user to the homepage with their token
+        const token = await user.getIdToken();
+        window.location.href = `/?token=${token}`;
+      } catch (error) {
+        submitButton.innerText = "Signup";
+        submitButton.disabled = false;
+
+        alert(error);
+      }
+    };
+  }
+</script>
