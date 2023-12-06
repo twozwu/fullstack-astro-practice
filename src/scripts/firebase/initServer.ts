@@ -33,8 +33,7 @@ const getServerApp = () => {
   }
 
   app = initializeApp({
-    credential: cert(server),
-    // credential: cert(serviceAccount as ServiceAccount),
+    credential: cert(server as ServiceAccount),
   });
 
   return app;

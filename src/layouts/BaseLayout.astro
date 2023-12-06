@@ -7,6 +7,27 @@ type Props = {
 };
 
 const { isPrivatePage = false } = Astro.props;
+
+if (Astro.request.method === "POST") {
+  try {
+    // Get the form data
+    const data = await Astro.request.formData();
+    /**
+     * Get the feedback value.
+     * Corresponds to the form input element value of the name, "feedback".
+     */
+    const feedback = data.get("feedback");
+
+    // Do something with the data
+    console.log({ feedback });
+
+    // Do something with the data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+}
 ---
 
 <html lang="en" class="dark">
@@ -88,7 +109,7 @@ const { isPrivatePage = false } = Astro.props;
 <script>
   import { auth } from "@scripts/firebase/init";
 
-   // Grab the sign-out button
+  // Grab the sign-out button
   const signoutButton = document.getElementById("sign-out-button") as
     | HTMLButtonElement
     | undefined;
@@ -109,12 +130,12 @@ const { isPrivatePage = false } = Astro.props;
         if (!response.ok) {
           throw new Error("server signout failed");
         }
-  /**
-  	* sign the user out via the signOut method
-  * on the Firebase auth module
-  */
+        /**
+         * sign the user out via the signOut method
+         * on the Firebase auth module
+         */
         await auth.signOut ();
-  // Redirect to the signin page
+        // Redirect to the signin page
         window.location.href = "/signin";
       } catch (error) {
         signoutButton.disabled = false;

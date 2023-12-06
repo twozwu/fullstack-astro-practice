@@ -1,1 +1,1 @@
-export const BUCKET_NAME = "gs://be-audible.appspot.com";
+export const BUCKET_NAME = "gs://beaudible-da042.appspot.com";
